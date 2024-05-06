@@ -17,7 +17,7 @@ trait Plant {
     }
 
     def writeProducedEnergyToFile(data: List[Double]): Unit
-    def isMalfunctioning(): Boolean = {
+    def isMalfunctioning: Boolean = {
         // to simulate malfunctioning, it generates a random number and checks if it's equal to 0
         val rand: Random = new Random()
         if (rand.nextInt(99) == 0) {
