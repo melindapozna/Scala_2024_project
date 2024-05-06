@@ -105,13 +105,21 @@ def Type_Time_Choice(): List[String] = {
   }
   
   }
-  
-  
-  println("Choose start time:")
+
+
+  println("Choose start date (YYYY-MM-DD):")
+  val start_date = scala.io.StdIn.readLine()
+  println("Choose start time(Hour):")
   val start_time = scala.io.StdIn.readLine()
-  println("Choose end time:")
+  println("Choose end date (YYYY-MM-DD):")
+  val end_date = scala.io.StdIn.readLine()
+  println("Choose end time(Hour):")
   val end_time = scala.io.StdIn.readLine()
-  List(data_id, start_time, end_time)
+
+  val start_time_total = s"${start_date}T${start_time}:00:00"
+  val end_time_total = s"${end_date}T${end_time}:00:00"
+
+  return List(data_id, start_time_total, end_time_total)
   
 }
 
