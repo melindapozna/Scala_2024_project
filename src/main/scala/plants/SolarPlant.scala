@@ -1,7 +1,7 @@
 package plants
 class SolarPlant extends Plant {
     override val name = "Solar panel"
-    override var workPercentage = 0.1
+    var workPercentage = 0.1
     override val filename = "solar.txt"
 
     def Angle_change(): Unit = {
@@ -19,9 +19,7 @@ class SolarPlant extends Plant {
         }
         else if (angle >= 60 && angle <= 90) {
             workPercentage = 0.075
-                    
         }
-            
     }
 
 }

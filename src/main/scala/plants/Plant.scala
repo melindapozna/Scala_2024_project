@@ -18,7 +18,8 @@ trait Plant {
         Plant.storage += x
     }
 
-    def decrementTakenStorage(x: Double): Unit = {
+    //TODO implement
+    def useEnergy(x: Double): Unit = {
         Plant.storage -= x
     }
 
