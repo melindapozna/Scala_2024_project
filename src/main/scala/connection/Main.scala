@@ -1,13 +1,14 @@
-package sttp.client4.examples
+package connection
 
-import plants._
-import io.circe.generic.auto._
-import sttp.client4._
-import sttp.client4.circe._
-import scala.util.{Try, Success, Failure}
 import cats.syntax.set
-import scala.io.StdIn
 import io.circe.Decoder.state
+import io.circe.generic.auto.*
+import plants.*
+import sttp.client4.*
+import sttp.client4.circe.*
+
+import scala.io.StdIn
+import scala.util.{Failure, Success, Try}
 
 
 
