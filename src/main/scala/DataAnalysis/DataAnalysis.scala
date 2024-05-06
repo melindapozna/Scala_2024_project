@@ -1,8 +1,8 @@
-package dataAnalysis
+package DataAnalysis
 
 
 
-class DataAnalysis {
+object DataAnalysis {
 
     def mean(data: List[Double]): Double = {
         val sum = data.foldLeft(0.0)(_ + _)
