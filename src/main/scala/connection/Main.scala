@@ -25,7 +25,7 @@ object Main {
 
     response.body match {
       case Left(error) =>
-        println(s"Error: $error")
+        println(s"Error: ${error}")
       case Right(body) =>
         if (response.isSuccess) {
           // Main program here
@@ -42,11 +42,11 @@ object Main {
                 val power_list = APIRequest(prop(0), prop(1), prop(2))
                 println("How many plants you want to use?")
                 val amount = scala.io.StdIn.readInt()
-                if (prop(0) == "245") {
+                if (prop.head == "245") {
                   val solar_plant = new SolarPlant()
                   solar_plant.produceEnergy(power_list, amount)
                 }
-                else if (prop(0) == "247") {
+                else if (prop.head == "247") {
                   val solar_plant = new WindPlant()
                   solar_plant.produceEnergy(power_list, amount)
                 }

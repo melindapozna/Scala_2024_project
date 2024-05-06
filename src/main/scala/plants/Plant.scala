@@ -1,6 +1,7 @@
 package plants
-import scala.util.Random
+
 import java.io.{DataOutputStream, File, FileOutputStream}
+import scala.io.Source
 
 
 
@@ -29,13 +30,28 @@ trait Plant {
 
     def writeProducedEnergyToFile(data: List[Double]): Unit = {
         val dataOutputStream = new DataOutputStream(new FileOutputStream(new File(filename)))
-        data.foreach(dataOutputStream.writeDouble)
-        dataOutputStream.close()
+        val file = new File(filename)
+        val buffer = new BufferedWriter(new FileWriter(file))
+        try {
+            buffer.write(numbers.mkString("\n"))
+        } finally {
+            buffer.close()
+        }
+    }
+
+    def readFromFile(using filename): List[Double] = {
+        val file = Source.fromFile(filename)
+        try {
+            file.getLines().map(_.toDouble).toList
+        } finally {
+            file.close()
+        }
     }
 
     def produceEnergy(data: List[Double], numberOfPlants: Int): List[Double] = {
         val energy = data.map(_ * workPercentage * numberOfPlants)
         writeProducedEnergyToFile(energy)
+
         energy
 
     }
