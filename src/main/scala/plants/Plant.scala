@@ -4,6 +4,7 @@ import java.io.File
 
 trait Plant {
     val name: String
+    var storage: Double
 
     //sets the multiplier when calculating the produced energy
     var workPercentage: Double
@@ -12,8 +13,8 @@ trait Plant {
     }
     //TODO implement
     //def getData(): List[Double]
-    def produceEnergy(data: List[Double]): List[Double] = {
-            data.map(_ * workPercentage)
+    def produceEnergy(data: List[Double], x: Int): List[Double] = {
+            data.map(_ * workPercentage * x)
     }
 
     def writeProducedEnergyToFile(data: List[Double]): Unit
