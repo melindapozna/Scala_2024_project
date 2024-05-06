@@ -1,6 +1,8 @@
 package sttp.client4.examples
 
 import plants._
+import DataAnalysis._
+
 import io.circe.generic.auto._
 import sttp.client4._
 import sttp.client4.circe._
@@ -8,7 +10,7 @@ import scala.util.{Try, Success, Failure}
 import cats.syntax.set
 import scala.io.StdIn
 import io.circe.Decoder.state
-import DataAnalysis.DataAnalysis
+import java.util.Date
 
 
 object Main {
@@ -45,13 +47,21 @@ object Main {
                 val amount = scala.io.StdIn.readInt()
                 if (prop.head == "245") {
                   val solar_plant = new SolarPlant()
-                  solar_plant.produceEnergy(power_list, amount)
+                  solar_plant.angleChange()
+                  val result = solar_plant.produceEnergy(power_list, amount)
                   println(f"${solar_plant.name} generated power.")
+                  Plant.storage += result.foldLeft(0.0)(_ + _)
+                  solar_plant.workPercentage = 0.1
+                  print("Solar panels were reset to their original position.")
                 }
                 else if (prop.head == "247") {
                   val wind_plant = new WindPlant()
-                  wind_plant.produceEnergy(power_list, amount)
+                  wind_plant.directionChange()
+                  val result = wind_plant.produceEnergy(power_list, amount)
                   println(f"${wind_plant.name} generated power.")
+                  Plant.storage += result.foldLeft(0.0)(_ + _)
+                  wind_plant.workPercentage = 0.1
+                  print("Wind turbines were reset to their original position.")
                 }
               case 2 =>
                 val storagePercentage = Plant.storage / Plant.MAX * 100
@@ -86,7 +96,7 @@ object Main {
                   case x if (1 <= x && x <= 3) => {
                     val energy_values = List(0.1, 0.25, 0.5)
                     val percentage = energy_values(x - 1)
-                    val result = plant.useEnergy(percentage)
+                    val result = SolarPlant().useEnergy(percentage)
                     if (result)
                       println("Energy transfer successful.")
                     else
@@ -94,7 +104,7 @@ object Main {
                   }
                   case _ => println("Wrong user input")
                 }
-              case 0 => break
+              case 0 => return false
               case _ => println("Wrong input")
             }
           }

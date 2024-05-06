@@ -35,7 +35,7 @@ trait Plant {
         val file = new File(filename)
         val buffer = new BufferedWriter(new FileWriter(file))
         try {
-            buffer.write(numbers.mkString("\n"))
+            buffer.write(data.mkString("\n"))
         } finally {
             buffer.close()
         }
@@ -70,5 +70,5 @@ trait Plant {
 object Plant {
     //taken storage space
     var storage = 0.0
-    val MAX = 1000000.0
+    val MAX = 10000000.0
 }
