@@ -19,9 +19,11 @@ trait Plant {
         Plant.storage += x
     }
 
-    //TODO implement
-    def useEnergy(x: Double): Unit = {
-        Plant.storage -= x
+    def useEnergy(x: Double): Boolean = {
+        if (Plant.storage >= (x * Plant.MAX)) {
+            Plant.storage -= (x * Plant.MAX)
+            true
+        } else false
     }
 
     def setWorkPercentage(x: Double): Unit = {

@@ -34,6 +34,7 @@ object Main {
             println("1)Generate power")
             println("2)Check storage")
             println("3)Data analysis")
+            println("4)Transfer energy")
             println("0)Exit")
             val user_choice = scala.io.StdIn.readInt()
             user_choice match {
@@ -45,10 +46,12 @@ object Main {
                 if (prop.head == "245") {
                   val solar_plant = new SolarPlant()
                   solar_plant.produceEnergy(power_list, amount)
+                  println(f"${solar_plant.name} generated power.")
                 }
                 else if (prop.head == "247") {
-                  val solar_plant = new WindPlant()
-                  solar_plant.produceEnergy(power_list, amount)
+                  val wind_plant = new WindPlant()
+                  wind_plant.produceEnergy(power_list, amount)
+                  println(f"${wind_plant.name} generated power.")
                 }
               case 2 =>
                 val storagePercentage = Plant.storage / Plant.MAX * 100
@@ -71,12 +74,30 @@ object Main {
                 println(f"Mode: ${mode}")
                 println(f"Range: ${range}")
                 println(f"Midrange: ${midrange}")
+
+              case 4 =>
+                println(
+                  """Choose your option:
+                1. Transfer energy to a nearby village (10%)
+                2. Transfer energy to a industrial facility (25%)
+                3. Transfer energy to municipal power grid (50%)""")
+                val user_choice = scala.io.StdIn.readInt()
+                user_choice match {
+                  case x if (1 <= x && x <= 3) => {
+                    val energy_values = List(0.1, 0.25, 0.5)
+                    val percentage = energy_values(x - 1)
+                    val result = plant.useEnergy(percentage)
+                    if (result)
+                      println("Energy transfer successful.")
+                    else
+                      println("Not enough energy to transfer")
+                  }
+                  case _ => println("Wrong user input")
+                }
               case 0 => break
               case _ => println("Wrong input")
             }
           }
-
-
         } else if (response.isServerError) {
           println(s"Server Error, Got response code: ${response.code}")
         } else {
