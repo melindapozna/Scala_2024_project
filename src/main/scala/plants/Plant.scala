@@ -1,6 +1,8 @@
 package plants
 import scala.util.Random
-import java.io.File
+import java.io.{DataOutputStream, File, FileOutputStream}
+
+
 
 trait Plant {
     val name: String
@@ -8,16 +10,34 @@ trait Plant {
 
     //sets the multiplier when calculating the produced energy
     var workPercentage: Double
+    val filename: String
+
+
+    def getStorage(): Double = Plant.storage
+    def incrementTakenStorage(x: Double): Unit = {
+        Plant.storage += x
+    }
+
+    def decrementTakenStorage(x: Double): Unit = {
+        Plant.storage -= x
+    }
+
     def setWorkPercentage(x: Double): Unit = {
         this.workPercentage = x
     }
-    //TODO implement
-    //def getData(): List[Double]
-    def produceEnergy(data: List[Double], x: Int): List[Double] = {
-            data.map(_ * workPercentage * x)
+
+    def writeProducedEnergyToFile(data: List[Double]): Unit = {
+        val dataOutputStream = new DataOutputStream(new FileOutputStream(new File(filename)))
+        data.foreach(dataOutputStream.writeDouble)
+        dataOutputStream.close()
     }
 
-    def writeProducedEnergyToFile(data: List[Double]): Unit
+    def produceEnergy(data: List[Double], numberOfPlants: Int): List[Double] = {
+        val energy = data.map(_ * workPercentage * numberOfPlants)
+        writeProducedEnergyToFile(energy)
+        energy
+
+    }
     def isMalfunctioning: Boolean = {
         // to simulate malfunctioning, it generates a random number and checks if it's equal to 0
         val rand: Random = new Random()
@@ -26,4 +46,10 @@ trait Plant {
         }
         false
     }
+}
+
+object Plant {
+    //taken storage space
+    var storage = 0.0
+    val MAX = 1000000.0
 }

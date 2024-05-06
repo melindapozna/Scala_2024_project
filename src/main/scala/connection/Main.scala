@@ -3,12 +3,15 @@ package connection
 import cats.syntax.set
 import io.circe.Decoder.state
 import io.circe.generic.auto.*
-import plants.*
+
 import sttp.client4.*
 import sttp.client4.circe.*
 
 import scala.io.StdIn
 import scala.util.{Failure, Success, Try}
+
+import plants.*
+import dataAnalysis.*
 
 
 
@@ -43,18 +46,33 @@ object Main {
             val power_list = APIRequest(prop(0), prop(1), prop(2))
             println("How many plants you want to use?")
             val amount = scala.io.StdIn.readInt()
-            if (prop(0) == "245") {
+            if (prop.head == "245") {
               val solar_plant = new SolarPlant()
               solar_plant.produceEnergy(power_list, amount)
             }
-            else if (prop(0) == "247") {
+            else if (prop.head == "247") {
               val solar_plant = new WindPlant()
               solar_plant.produceEnergy(power_list, amount)
             }
           case 2 =>  
-            // Choose between total, solar, wind
+            val storagePercentage = Plant.storage / Plant.MAX * 100
+            println(f"Storage is $storagePercentage % full.")
           case 3 =>
-            // Mean, avarage etc.
+            val prop = Type_Time_Choice()
+            val api_data_list = APIRequest(prop(0), prop(1), prop(2))
+            api_data_list.head match {
+              case "245" => SolarPlant().produceEnergy(api_data_list)
+              case "247" => WindPlant().produceEnergy(api_data_list)
+            }
+            val power_list = ???
+            val mean = DataAnalysis.mean(power_list)
+            val median = DataAnalysis.median(power_list)
+            val mode = DataAnalysis.mode(power_list)
+            val midrange = DataAnalysis.midrange(power_list)
+            val range = DataAnalysis.range(power_list)
+
+
+
           case 0 => 
           case _ => println("Wrong input")
         }
@@ -75,8 +93,8 @@ object Main {
 
 def Type_Time_Choice(): List[String] = {
   println("Choose type:")
-  println("1)Solar")
-  println("2)Wind")
+  println("1) Solar")
+  println("2) Wind")
   var data_id = "0"
   while (data_id == "0") {
     val type_choice = scala.io.StdIn.readInt()
@@ -93,8 +111,7 @@ def Type_Time_Choice(): List[String] = {
   val start_time = scala.io.StdIn.readLine()
   println("Choose end time:")
   val end_time = scala.io.StdIn.readLine()
-  
-  return List(data_id, start_time, end_time)
+  List(data_id, start_time, end_time)
   
 }
 
@@ -119,8 +136,6 @@ def APIRequest(DataID: String, StartTime: String, EndTime: String): List[Double]
     List.empty
   case Right(apiResponse) =>
     apiResponse.data.map(_.value)
-    
-
 
   }
 
